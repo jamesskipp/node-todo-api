@@ -5,12 +5,14 @@ const {ObjectId} = require('mongodb');
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
-const todos =[{
+const todos = [{
   _id: new ObjectId(),
   text: 'first test todo'
 }, {
   _id: new ObjectId(),
-  text: 'second test todo'
+  text: 'second test todo',
+  completed: true,
+  completedAt: 333
 }];
 
 beforeEach((done) => {
@@ -70,8 +72,8 @@ describe('GET /todos', () => {
         expect(res.body.todos.length).toBe(2);
       })
       .end(done);
-  })
-})
+  });
+});
 
 describe('GET /todos/:id', () => {
   it('should return todo doc', (done) => {
@@ -131,5 +133,36 @@ describe('DELETE /todos/:id', () => {
       .delete('/todos/NotAnId')
       .expect(404)
       .end(done);
-  })
-})
+  });
+});
+
+describe('PATCH /todos/:id', () => {
+  it('should update the todo', (done) => {
+    var hexId = todos[0]._id.toHexString();
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send({completed: true, text: "updated"})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe('updated');
+        expect(res.body.todo.completed).toBe(true);
+        expect(res.body.todo.completedAt).toBeA('number');
+      })
+      .end(done);
+  });
+
+  it('should clear completedAt when todo is not completed', (done) => {
+    var hexId = todos[1]._id.toHexString();
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send({completed: false, text: 'updated'})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe('updated');
+        expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.completedAt).toNotExist();
+      })
+      .end(done);
+  });
+});
