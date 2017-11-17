@@ -93,8 +93,43 @@ describe('GET /todos/:id', () => {
 
   it('should return 404 for non-object ids', (done) => {
     request(app)
-      .get(`/todos/NotAnId`)
+      .get('/todos/NotAnId')
       .expect(404)
       .end(done);
   });
 });
+
+describe('DELETE /todos/:id', () => {
+  it('should delete todo doc', (done) => {
+    var hexId = todos[0]._id.toHexString();
+
+    request(app)
+      .delete(`/todos/${hexId}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo._id).toBe(hexId);
+      })
+      .end((err, res) => {
+        if (err) return done(err);
+
+        Todo.findById(hexId).then((todo) => {
+          expect(todo).toNotExist();
+          done();
+        }).catch((err) => done(err));
+      });
+  });
+
+  it('should return 404 if todo not found', (done) => {
+    request(app)
+      .delete('/todos/5a0e2c4caee8f6201b9c6415')
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 404 for non-object ids', (done) => {
+    request(app)
+      .delete('/todos/NotAnId')
+      .expect(404)
+      .end(done);
+  })
+})
