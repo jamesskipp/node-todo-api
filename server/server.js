@@ -6,7 +6,7 @@ const _ = require('lodash');
 const { ObjectId } = require('mongodb');
 // const bcrypt = require('bcryptjs');
 
-const { mongoose } = require('./db/mongoose');
+const { mongoose } = require('./db/mongoose'); // eslint-disable-line no-unused-vars
 const { Todo } = require('./models/todo');
 const { User } = require('./models/user');
 const { authenticate } = require('./middleware/authenticate');
