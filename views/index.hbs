@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{> dependencies}}
+    <title>Todo REST API</title>
+  </head>
+  <body>
+    <nav class="nav navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Todos</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="https://github.com/jamesskipp/node-todo-api">GitHub</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+          <div class="jumbotron text-center">
+            <h1>Todo REST API</h1>
+          </div>
+          <div class="jumbotron">
+            <p>To post todos, first POST /users to create a user via JSON with
+            an email and password supplied. This will give you an access token.
+            A valid access token is a requirement of every other request. Login via
+            POST /users/login, logout via DELETE /users/me/token. You can locate
+            todo ID's via GET /todos.
+            </p>
+          </div>
+          <div class="jumbotron">
+            <p>POST /users</p>
+            <p>GET /users</p>
+            <p>POST /users/login</p>
+            <p>DELETE /users/me/token</p>
+            <p>POST /todos</p>
+            <p>GET /todos</p>
+            <p>GET /todos/:id</p>
+            <p>DELETE /todos/:id</p>
+            <p>PATCH /todos/:id</p>
+          </div>
+          <br>
+        </div>
+        <div class="col-sm-1"></div>
+      </div>
+    </div>
+  </body>
+</html>

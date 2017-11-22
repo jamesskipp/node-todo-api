@@ -4,7 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 const { ObjectId } = require('mongodb');
-// const bcrypt = require('bcryptjs');
+const hbs = require('hbs');
+const path = require('path');
 
 const { mongoose } = require('./db/mongoose'); // eslint-disable-line no-unused-vars
 const { Todo } = require('./models/todo');
@@ -14,7 +15,15 @@ const { authenticate } = require('./middleware/authenticate');
 const app = express();
 const port = process.env.PORT;
 
+hbs.registerPartials(`${__dirname}/../views/partials`);
+app.set('view engine', 'hbs')
+  .use(express.static(path.join(`${__dirname}/../public`)));
+
 app.use(bodyParser.json());
+
+app.get('/', (req, res) => {
+  res.render('index.hbs');
+});
 
 app.post('/todos', authenticate, (req, res) => {
   const todo = new Todo({
